@@ -1,0 +1,4 @@
+site_name: 'Лабораторная работа 2'
+theme: mkdocs
+nav:
+  - "Главная": index.md
