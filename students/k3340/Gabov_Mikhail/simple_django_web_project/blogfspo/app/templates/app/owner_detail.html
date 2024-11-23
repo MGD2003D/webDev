@@ -1,0 +1,25 @@
+<!-- owner_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car detail</title>
+</head>
+
+<body>
+  <h1>{{ object }}</h1>
+  <p>Birthdate: {{ object.birth_date }}</p>
+    CarID`s:
+    {% for car in data.cars.all %}
+        {{ car.id }}
+    {% empty %}
+        No cars associated
+    {% endfor %}
+    <br/>
+    <hr/>
+  <a href="/app/owner/list/">Get back</a>
+</body>
+</html>

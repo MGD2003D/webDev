@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<div class="main">
+
+    {% for data in owner %}
+
+    ID: {{ data.id }}<br/>
+    Full name: {{ data.first_name }} {{ data.last_name }}<br/>
+    Birthdate: {{ data.birth_date }}<br/>
+    CarID`s:
+    {% for car in data.cars.all %}
+        {{ car.id }}
+    {% empty %}
+        No cars associated
+    {% endfor %}
+    <br/>
+    <hr/>
+
+    {% endfor %}
+
+</div>

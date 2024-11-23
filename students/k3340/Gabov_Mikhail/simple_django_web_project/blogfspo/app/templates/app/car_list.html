@@ -1,0 +1,37 @@
+<!-- car_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car List</title>
+</head>
+
+<body>
+  <h1>Cars</h1>
+  <a href="/car/create/">Add new one</a>
+  <ul>
+    {% for car in object_list %}
+    <li>
+        <strong>Brand:</strong> {{ car.brand }}, actions:
+        <a href="/car/{{ car.id }}/update/">Edit</a> |
+        <a href="/car/{{ car.id }}/delete/">Delete</a> |
+        <a href="/car/{{ car.id }}/">Detail</a>
+        <p><strong>Model:</strong> {{ car.model }}</p>
+        <p><strong>Owner:</strong>
+            {% for car_owner in car.carowner_set.all %}
+                    <a href="?owner={{ car_owner.owner_id.id }}">
+                        {{ car_owner.owner_id.first_name }} {{ car_owner.owner_id.last_name }}</p>
+                    </a>
+            {% empty %}
+                No owner yet.
+            {% endfor %}
+    </li>
+    {% empty %}
+    <li>No Cars yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>
