@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render
 from .models import Owner, Car, CarOwner
 from django.views.generic import DetailView, ListView
+from .forms import PostForm
 
 # Create your views here.
 def owner_info(request, owner_id):
@@ -41,3 +42,15 @@ class CarListView(ListView):
                 return self.model.objects.none()
 
         return Car.objects.all()
+
+def create_view(request):
+
+    context={}
+
+    form = PostForm(request.POST or None)
+
+    if form.is_valid():
+
+        form.save()
+    context['form'] = form
+    return render(request, 'app/car_create.html', context)

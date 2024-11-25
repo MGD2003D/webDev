@@ -181,3 +181,43 @@ class CarListView(ListView):
 ![car-list](images/img_6.png)
 *с параметром* `?owner=2`
 ![CarOwner](images/img_7.png)
+
+## Работа с формами и предствалениями
+
+`forms.py`
+```py 
+class PostForm(forms.ModelForm):
+
+    class Meta:
+        model = Car
+        template_name = 'car_create.html'
+
+        fields = [
+            'brand',
+            'model',
+            'color',
+            'owners',
+            'license_plate'
+        ]
+```
+
+Маршрут
+```py 
+    path('car/create/', create_view, name='car_create'),
+```
+
+Шаблон
+```html 
+<!-- car_crerate.html -->
+<!DOCTYPE html>
+<form method="POST" enctype="multipart/form-data">
+
+    <!-- Security token -->
+    {% csrf_token %}
+
+    <!-- Using the formset -->
+    {{ form.as_p }}
+
+    <input type="submit" value="Submit">
+</form>
+```
