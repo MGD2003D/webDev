@@ -196,7 +196,6 @@ class PostForm(forms.ModelForm):
             'brand',
             'model',
             'color',
-            'owners',
             'license_plate'
         ]
 ```
@@ -221,3 +220,5 @@ class PostForm(forms.ModelForm):
     <input type="submit" value="Submit">
 </form>
 ```
+
+![car-create-form](images/img_8.png)

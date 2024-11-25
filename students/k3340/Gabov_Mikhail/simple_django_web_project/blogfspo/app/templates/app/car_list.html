@@ -10,7 +10,7 @@
 
 <body>
   <h1>Cars</h1>
-  <a href="/car/create/">Add new one</a>
+  <a href="/app/car/create/">Add new one</a>
   <ul>
     {% for car in object_list %}
     <li>
@@ -19,6 +19,7 @@
         <a href="/car/{{ car.id }}/delete/">Delete</a> |
         <a href="/car/{{ car.id }}/">Detail</a>
         <p><strong>Model:</strong> {{ car.model }}</p>
+        <p><strong>License Plate:</strong> {{ car.license_plate }}</p>
         <p><strong>Owner:</strong>
             {% for car_owner in car.carowner_set.all %}
                     <a href="?owner={{ car_owner.owner_id.id }}">

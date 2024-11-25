@@ -1,5 +1,5 @@
 from django import forms
-from .models import Car
+from .models import Car, CarOwner
 
 class PostForm(forms.ModelForm):
 
@@ -11,6 +11,5 @@ class PostForm(forms.ModelForm):
             'brand',
             'model',
             'color',
-            'owners',
             'license_plate'
         ]
