@@ -15,9 +15,8 @@
     {% for car in object_list %}
     <li>
         <strong>Brand:</strong> {{ car.brand }}, actions:
-        <a href="/car/{{ car.id }}/update/">Edit</a> |
-        <a href="/car/{{ car.id }}/delete/">Delete</a> |
-        <a href="/car/{{ car.id }}/">Detail</a>
+        <a href="/app/car/{{ car.id }}/update/">Edit</a> |
+        <a href="/app/car/{{ car.id }}/delete/">Delete</a>
         <p><strong>Model:</strong> {{ car.model }}</p>
         <p><strong>License Plate:</strong> {{ car.license_plate }}</p>
         <p><strong>Owner:</strong>

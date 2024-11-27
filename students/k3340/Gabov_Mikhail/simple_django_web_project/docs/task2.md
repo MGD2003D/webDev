@@ -182,15 +182,14 @@ class CarListView(ListView):
 *с параметром* `?owner=2`
 ![CarOwner](images/img_7.png)
 
-## Работа с формами и предствалениями
+## CRUD Car
 
-`forms.py`
+Create форма
 ```py 
-class PostForm(forms.ModelForm):
+class CarCreateForm(forms.ModelForm):
 
     class Meta:
         model = Car
-        template_name = 'car_create.html'
 
         fields = [
             'brand',
@@ -200,25 +199,72 @@ class PostForm(forms.ModelForm):
         ]
 ```
 
-Маршрут
+Маршруты
 ```py 
-    path('car/create/', create_view, name='car_create'),
+path('car/create/', CarCreateView.as_view(), name='car_create'),
+path('car/<int:pk>/update/', CarUpdateView.as_view(), name='car_update'),
+path('car/<int:pk>/delete/', CarDeleteView.as_view(), name = 'car_delete'),
 ```
 
-Шаблон
-```html 
-<!-- car_crerate.html -->
-<!DOCTYPE html>
-<form method="POST" enctype="multipart/form-data">
+Контроллер
+```py 
+class CarCreateView(CreateView):
+    model = Car
+    form_class = CarCreateForm
+    template_name = 'app/car_create.html'
+    success_url = 'app/car/list'
 
-    <!-- Security token -->
-    {% csrf_token %}
+class CarUpdateView(UpdateView):
+    model = Car
+    fields = ['license_plate', 'brand', 'model', 'color']
+    success_url = 'app/car/list'
+    template_name = 'app/car_update.html'
 
-    <!-- Using the formset -->
-    {{ form.as_p }}
-
-    <input type="submit" value="Submit">
-</form>
+class CarDeleteView(DeleteView):
+    model = Car
+    success_url = 'app/car/list'
+    template_name = 'app/car_delete.html'
 ```
 
-![car-create-form](images/img_8.png)
+## CRUD Owners
+
+Create форма
+```py 
+class OwnerCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Owner
+
+        fields = [
+            'last_name',
+            'first_name',
+            'birth_date'
+        ]
+```
+
+Контроллер
+```py 
+class OwnerCreateView(CreateView):
+    model = Owner
+    form_class = OwnerCreateForm
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_create.html'
+
+class OwnerUpdateView(UpdateView):
+    model = Owner
+    fields = ['last_name', 'first_name', 'birth_date']
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_update.html'
+
+class OwnerDeleteView(DeleteView):
+    model = Owner
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_delete.html'
+```
+
+Маршруты
+```py 
+path('owner/create/', OwnerCreateView.as_view(), name='owner_create'),
+path('owner/<int:pk>/update/', OwnerUpdateView.as_view(), name='owner_update'),
+path('owner/<int:pk>/delete/', OwnerDeleteView.as_view(), name='owner_delete'),
+```

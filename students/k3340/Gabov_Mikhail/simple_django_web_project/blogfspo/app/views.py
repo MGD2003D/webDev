@@ -1,8 +1,9 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Owner, Car, CarOwner
 from django.views.generic import DetailView, ListView
-from .forms import CarPostForm
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from .forms import CarCreateForm, OwnerCreateForm
 
 # Create your views here.
 def owner_info(request, owner_id):
@@ -43,7 +44,8 @@ class CarListView(ListView):
 
         return Car.objects.all()
 
-def car_create_view(request):
+"""
+def CarCreateView(request):
 
     context={}
 
@@ -54,3 +56,38 @@ def car_create_view(request):
         form.save()
     context['form'] = form
     return render(request, 'app/car_create.html', context)
+"""
+
+class CarCreateView(CreateView):
+    model = Car
+    form_class = CarCreateForm
+    template_name = 'app/car_create.html'
+    success_url = '/app/car/list'
+
+class CarUpdateView(UpdateView):
+    model = Car
+    fields = ['license_plate', 'brand', 'model', 'color']
+    success_url = '/app/car/list'
+    template_name = 'app/car_update.html'
+
+class CarDeleteView(DeleteView):
+    model = Car
+    success_url = '/app/car/list'
+    template_name = 'app/car_delete.html'
+
+class OwnerCreateView(CreateView):
+    model = Owner
+    form_class = OwnerCreateForm
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_create.html'
+
+class OwnerUpdateView(UpdateView):
+    model = Owner
+    fields = ['last_name', 'first_name', 'birth_date']
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_update.html'
+
+class OwnerDeleteView(DeleteView):
+    model = Owner
+    success_url = '/app/owner/list'
+    template_name = 'app/owner_delete.html'

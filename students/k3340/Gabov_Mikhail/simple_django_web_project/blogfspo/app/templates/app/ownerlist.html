@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <div class="main">
 
+    <span><h1>Owners</h1><a href="/app/owner/create/">Add new one</a></span>
+    <br><br>
+
     {% for data in owner %}
 
+        <a href="/app/owner/{{ data.id }}/update/">Edit</a> | <a href="/app/owner/{{ data.id }}/delete/">Delete</a>
     ID: {{ data.id }}<br/>
     Full name: {{ data.first_name }} {{ data.last_name }}<br/>
     Birthdate: {{ data.birth_date }}<br/>
-    CarID`s:
+    Cars:
     {% for car in data.cars.all %}
-        {{ car.id }}
+        {{ car }}
+        <a href="/app/car/list/?owner={{ data.id }}">Detail</a>
     {% empty %}
         No cars associated
     {% endfor %}
