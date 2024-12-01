@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Owner, Car, CarOwner
+from .models import Owner, Car, CarOwner, User
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from .forms import CarCreateForm, OwnerCreateForm
@@ -91,3 +92,9 @@ class OwnerDeleteView(DeleteView):
     model = Owner
     success_url = '/app/owner/list'
     template_name = 'app/owner_delete.html'
+
+class UserCreateView(CreateView):
+    model = User
+    fields = ['username', 'email', 'password', 'first_name', 'last_name', 'passport_number', 'address', 'nationality']
+    template_name = 'baseuser_create.html'
+    success_url = '/app/owner/list'
