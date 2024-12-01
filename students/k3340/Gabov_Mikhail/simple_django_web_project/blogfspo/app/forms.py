@@ -1,5 +1,6 @@
 from django import forms
-from .models import Car, CarOwner, Owner
+from .models import Car, CarOwner, Owner, User
+from django.contrib.auth.forms import UserCreationForm
 
 class CarCreateForm(forms.ModelForm):
 
@@ -22,4 +23,18 @@ class OwnerCreateForm(forms.ModelForm):
             'last_name',
             'first_name',
             'birth_date'
+        ]
+
+class UserRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'passport_number',
+            'address',
+            'nationality',
+            'birth_date',
         ]

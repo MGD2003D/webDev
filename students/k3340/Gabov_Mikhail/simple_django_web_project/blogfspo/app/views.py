@@ -1,10 +1,12 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from .models import Owner, Car, CarOwner, User
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from .forms import CarCreateForm, OwnerCreateForm
+from .forms import CarCreateForm, OwnerCreateForm, UserRegistrationForm
 
 # Create your views here.
 def owner_info(request, owner_id):
@@ -95,6 +97,6 @@ class OwnerDeleteView(DeleteView):
 
 class UserCreateView(CreateView):
     model = User
-    fields = ['username', 'email', 'password', 'first_name', 'last_name', 'passport_number', 'address', 'nationality']
-    template_name = 'baseuser_create.html'
-    success_url = '/app/owner/list'
+    form_class = UserRegistrationForm
+    success_url = reverse_lazy('login')
+    template_name = 'app/register.html'

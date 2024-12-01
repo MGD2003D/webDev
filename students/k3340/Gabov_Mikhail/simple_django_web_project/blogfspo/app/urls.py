@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import OwnerDetailView, CarListView, CarCreateView, CarUpdateView, CarDeleteView, OwnerCreateView, \
-    OwnerUpdateView, OwnerDeleteView
+    OwnerUpdateView, OwnerDeleteView, UserCreateView
 
 urlpatterns = [
     # path('owner/<int:owner_id>/', views.owner_info, name='owner_info'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('owner/create/', OwnerCreateView.as_view(), name='owner_create'),
     path('owner/<int:pk>/update/', OwnerUpdateView.as_view(), name='owner_update'),
     path('owner/<int:pk>/delete/', OwnerDeleteView.as_view(), name='owner_delete'),
+    path('register/', UserCreateView.as_view(), name='user_create')
 ]
