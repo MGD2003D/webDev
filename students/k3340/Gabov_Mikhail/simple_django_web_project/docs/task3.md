@@ -117,3 +117,28 @@ class UserRegistrationForm(forms.ModelForm):
 ```py 
 path('register/', UserCreateView.as_view(), name='user_create')
 ```
+
+## Ограничение прав пользователя
+
+*Поскольку требуется реализовать разрешения на уровне объекта (user имеет подконтрольного owner — нужна поддержка object-level permissions), использую расширение `Django Guardian`*
+
+`settings.py`
+```py 
+INSTALLED_APPS = [
+    ...
+    'guardian',
+]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+ANONYMOUS_USER_NAME = 'AnonymousUser'
+```
+
+Для авторизации используется `django.contrib.auth.urls`
+```py 
+    path('', home, name='home'),
+    path('accounts/', include('django.contrib.auth.urls')),
+```

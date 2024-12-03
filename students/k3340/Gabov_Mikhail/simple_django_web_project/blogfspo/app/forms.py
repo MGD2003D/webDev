@@ -25,11 +25,13 @@ class OwnerCreateForm(forms.ModelForm):
             'birth_date'
         ]
 
-class UserRegistrationForm(forms.ModelForm):
+class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
             'username',
+            'password1',
+            'password2',
             'first_name',
             'last_name',
             'email',
