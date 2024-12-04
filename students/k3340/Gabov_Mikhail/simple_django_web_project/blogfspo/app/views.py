@@ -11,6 +11,7 @@ from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from .forms import CarCreateForm, OwnerCreateForm, UserRegistrationForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 
 # Create your views here.
 def owner_info(request, owner_id):
@@ -123,3 +124,35 @@ def home(request):
     else:
         role = "User"
     return render(request, 'app/home.html', {'role': role})
+
+@login_required
+def rentals_view(request):
+    owner = get_object_or_404(Owner, user=request.user)
+
+    current_date = now().date()
+
+    current_rentals = CarOwner.objects.filter(owner_id=owner, date_end__gt=current_date)
+
+    past_rentals = CarOwner.objects.filter(owner_id=owner, date_end__lte=current_date)
+
+    return render(request, 'app/rentals.html', {
+        'current_rentals': current_rentals,
+        'past_rentals': past_rentals,
+    })
+
+@login_required
+def end_rental(request, rental_id):
+
+    print(rental_id)
+
+    rental = get_object_or_404(CarOwner, id=rental_id, owner_id__user=request.user)
+
+    current_date = now().date()
+
+    if rental.date_end and rental.date_end <= current_date:
+        raise Http404("This rental has already ended or cannot be modified.")
+
+    rental.date_end = current_date
+    rental.save()
+
+    return redirect('rentals')
