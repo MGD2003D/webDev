@@ -24,10 +24,10 @@
                         <a class="nav-link {% if request.path == '/app/rentals/' %}active{% endif %}" href="{% url 'rentals' %}">Rentals</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Cars</a> <!-- Пока неработающая ссылка -->
+                        <a class="nav-link {% if request.path == '/app/cars/' %}active{% endif %}" href="{% url 'available_cars' %}">Cars</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Account</a> <!-- Пока неработающая ссылка -->
+                        <a class="nav-link {% if request.path == '/app/account/' %}active{% endif %}" href="{% url 'account' %}">Account</a>
                     </li>
                 </ul>
                 <span class="navbar-text me-3 text-white">

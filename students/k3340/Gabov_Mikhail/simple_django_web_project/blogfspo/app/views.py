@@ -6,7 +6,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Owner, Car, CarOwner, User
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from .forms import CarCreateForm, OwnerCreateForm, UserRegistrationForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
@@ -156,3 +156,21 @@ def end_rental(request, rental_id):
     rental.save()
 
     return redirect('rentals')
+
+
+@login_required
+def available_cars(request):
+    rented_cars = CarOwner.objects.filter(date_end__gt=now()).values_list('car_id', flat=True)
+
+    available_cars = Car.objects.exclude(id__in=rented_cars)
+
+    return render(request, 'app/available_cars.html', {'available_cars': available_cars})
+
+class AccountView(LoginRequiredMixin, TemplateView):
+    template_name = 'app/account.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
+        return context

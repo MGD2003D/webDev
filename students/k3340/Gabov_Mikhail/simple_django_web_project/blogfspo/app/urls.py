@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from .views import OwnerDetailView, CarListView, CarCreateView, CarUpdateView, CarDeleteView, OwnerCreateView, \
-    OwnerUpdateView, OwnerDeleteView, UserCreateView, home
+    OwnerUpdateView, OwnerDeleteView, UserCreateView, home, AccountView
 
 urlpatterns = [
     # path('owner/<int:owner_id>/', views.owner_info, name='owner_info'),
@@ -19,4 +19,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('rentals/', views.rentals_view, name='rentals'),
     path('rental/<int:rental_id>/end/', views.end_rental, name='end_rental'),
+    path('cars/', views.available_cars, name='available_cars'),
+    path('account/', AccountView.as_view(), name='account'),
 ]
