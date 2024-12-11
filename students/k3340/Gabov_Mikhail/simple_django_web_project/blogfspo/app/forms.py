@@ -40,3 +40,8 @@ class UserRegistrationForm(UserCreationForm):
             'nationality',
             'birth_date',
         ]
+
+class CarOwnerForm(forms.ModelForm):
+    class Meta:
+        model = CarOwner
+        fields = ['car_id', 'owner_id', 'date_start', 'date_end']
