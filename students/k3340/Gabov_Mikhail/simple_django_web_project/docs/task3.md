@@ -120,22 +120,24 @@ path('register/', UserCreateView.as_view(), name='user_create')
 
 ## Ограничение прав пользователя
 
-*Поскольку требуется реализовать разрешения на уровне объекта (user имеет подконтрольного owner — нужна поддержка object-level permissions), использую расширение `Django Guardian`*
-
-`settings.py`
+Пример для отображения владельцу только его аренд
 ```py 
-INSTALLED_APPS = [
-    ...
-    'guardian',
-]
+@login_required
+def rentals_view(request):
+    owner = get_object_or_404(Owner, user=request.user)
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
-)
+    current_date = now().date()
 
-ANONYMOUS_USER_NAME = 'AnonymousUser'
+    current_rentals = CarOwner.objects.filter(owner_id=owner, date_end__gt=current_date)
+
+    past_rentals = CarOwner.objects.filter(owner_id=owner, date_end__lte=current_date)
+
+    return render(request, 'app/rentals.html', {
+        'current_rentals': current_rentals,
+        'past_rentals': past_rentals,
+    })
 ```
+
 
 Для авторизации используется `django.contrib.auth.urls`
 ```py 
@@ -143,4 +145,6 @@ ANONYMOUS_USER_NAME = 'AnonymousUser'
     path('accounts/', include('django.contrib.auth.urls')),
 ```
 
-django.contrib.messages
+`django.contrib.messages` — для отображения `Toast` скриптов
+
+только сейчас я узнал про base.html ... можно было не делать всем шапки по отдельности!

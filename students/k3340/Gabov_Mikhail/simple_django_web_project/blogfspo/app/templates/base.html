@@ -1,0 +1,4 @@
+<form method="get" action="{% url 'search:index' %}">
+    <input type="text" name="q" placeholder="Введите запрос..." value="{{ request.GET.q }}">
+    <button type="submit">Искать</button>
+</form>

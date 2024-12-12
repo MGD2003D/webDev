@@ -1,0 +1,38 @@
+{% extends './base.html' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block content %}
+    <h1>Результаты поиска</h1>
+
+    <form method="get" action="{% url 'search:index' %}">
+        <input type="text" name="q" placeholder="Введите запрос..." value="{{ request.GET.q }}">
+        <button type="submit">Искать</button>
+    </form>
+
+    {% if results %}
+        {% for result in results %}
+            <div>
+                <h3>{{ result }}</h3>
+            </div>
+        {% endfor %}
+
+        <nav>
+            <ul class="pagination">
+                {% if results.has_previous %}
+                    <li><a href="?q={{ query }}&page=1">Первая</a></li>
+                    <li><a href="?q={{ query }}&page={{ results.previous_page_number }}">Предыдущая</a></li>
+                {% endif %}
+
+                <li>Страница {{ results.number }} из {{ results.paginator.num_pages }}</li>
+
+                {% if results.has_next %}
+                    <li><a href="?q={{ query }}&page={{ results.next_page_number }}">Следующая</a></li>
+                    <li><a href="?q={{ query }}&page={{ results.paginator.num_pages }}">Последняя</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p>По вашему запросу "{{ request.GET.q }}" ничего не найдено.</p>
+    {% endif %}
+{% endblock %}

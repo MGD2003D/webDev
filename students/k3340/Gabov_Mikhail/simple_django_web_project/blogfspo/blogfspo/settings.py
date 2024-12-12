@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'guardian',
+    'search.apps.SearchConfig',
+    'django.contrib.postgres',
+    'bootstrap3',
 ]
 
 AUTHENTICATION_BACKENDS = (
