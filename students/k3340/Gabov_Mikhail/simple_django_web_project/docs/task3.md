@@ -142,3 +142,5 @@ ANONYMOUS_USER_NAME = 'AnonymousUser'
     path('', home, name='home'),
     path('accounts/', include('django.contrib.auth.urls')),
 ```
+
+django.contrib.messages

@@ -84,6 +84,7 @@ class CarCreateView(CreateView):
     model = Car
     form_class = CarCreateForm
     template_name = 'app/car_create.html'
+    # template_name = 'app/car_list.html'
     success_url = '/app/car/list'
 
     def form_valid(self, form):
@@ -103,6 +104,7 @@ class CarUpdateView(UpdateView):
         messages.success(self.request, "Car updated successfully!")
         return response
 
+"""
 class CarDeleteView(DeleteView):
     model = Car
     success_url = '/app/car/list'
@@ -112,7 +114,19 @@ class CarDeleteView(DeleteView):
         response = super().delete(request, *args, **kwargs)
         messages.success(request, "Car deleted successfully!")
         return response
+"""
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def car_delete(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+
+    if request.method == "POST":
+        car.delete()
+        messages.success(request, "Car deleted successfully!")
+        return redirect('car_list')
+
+    return render(request, 'app/car_delete.html', {'car': car})
 
 class OwnerCreateView(LoginRequiredMixin, CreateView):
     model = Owner
@@ -133,7 +147,7 @@ class OwnerUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "Owner updated successfully!")
         return response
 
-
+"""
 class OwnerDeleteView(LoginRequiredMixin, DeleteView):
     model = Owner
     success_url = '/app/owner/list'
@@ -147,6 +161,21 @@ class OwnerDeleteView(LoginRequiredMixin, DeleteView):
         user_to_delete.delete()
         messages.success(request, "Owner and associated user deleted successfully!")
         return response
+"""
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_owner(request, owner_id):
+    owner = get_object_or_404(Owner, id=owner_id)
+
+    if owner.user:
+        owner.user.delete()
+
+    owner.delete()
+
+    messages.success(request, "Owner and associated user deleted successfully!")
+
+    return redirect('/app/owner/list')
 
 class UserCreateView(CreateView):
     model = User
@@ -244,6 +273,7 @@ def manage_rentals(request):
     available_cars = Car.objects.exclude(id__in=occupied_cars)
     owners = Owner.objects.exclude(first_name__isnull=True).exclude(first_name="").exclude(last_name__isnull=True).exclude(last_name="")
     rentals = CarOwner.objects.all()
+    # breakpoint()
     return render(request, 'app/manage_rentals.html', {
         'rentals': rentals,
         'cars': available_cars,

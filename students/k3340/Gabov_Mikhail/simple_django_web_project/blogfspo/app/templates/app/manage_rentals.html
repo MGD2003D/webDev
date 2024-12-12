@@ -131,7 +131,7 @@
                             <label for="car_id" class="form-label">Car</label>
                             <select name="car_id" id="car_id" class="form-select" required>
                                 <option value="" disabled selected>Select a car</option>
-                                {% for car in available_cars %}
+                                {% for car in cars %}
                                     <option value="{{ car.id }}">{{ car.brand }} {{ car.model }}</option>
                                 {% endfor %}
                             </select>

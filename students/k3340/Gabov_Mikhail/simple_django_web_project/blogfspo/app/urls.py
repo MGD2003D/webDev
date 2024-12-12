@@ -1,7 +1,8 @@
 from django.urls import path, include
 from . import views
-from .views import OwnerDetailView, CarListView, CarCreateView, CarUpdateView, CarDeleteView, OwnerCreateView, \
-    OwnerUpdateView, OwnerDeleteView, UserCreateView, AccountView
+from .views import OwnerDetailView, CarListView, CarCreateView, CarUpdateView, OwnerCreateView, \
+    OwnerUpdateView, UserCreateView, AccountView, car_delete, delete_owner
+# from .views import CarDeleteView, OwnerDeleteView
 
 urlpatterns = [
     # path('owner/<int:owner_id>/', views.owner_info, name='owner_info'),
@@ -10,10 +11,12 @@ urlpatterns = [
     path('car/list/', CarListView.as_view(), name='car_list'),
     path('car/create/', CarCreateView.as_view(), name='car_create'),
     path('car/<int:pk>/update/', CarUpdateView.as_view(), name='car_update'),
-    path('car/<int:pk>/delete/', CarDeleteView.as_view(), name = 'car_delete'),
+    # path('car/<int:pk>/delete/', CarDeleteView.as_view(), name = 'car_delete'),
+    path('car/<int:pk>/delete/', car_delete, name='delete_car'),
     path('owner/create/', OwnerCreateView.as_view(), name='owner_create'),
     path('owner/<int:pk>/update/', OwnerUpdateView.as_view(), name='owner_update'),
-    path('owner/<int:pk>/delete/', OwnerDeleteView.as_view(), name='owner_delete'),
+    # path('owner/<int:pk>/delete/', OwnerDeleteView.as_view(), name='owner_delete'),
+    path('owner/<int:owner_id>/delete/', delete_owner, name='delete_owner'),
     path('register/', UserCreateView.as_view(), name='user_create'),
     path('', views.role_redirect, name='role_redirect'),
     path('user/home/', views.home, name='home_user'),
