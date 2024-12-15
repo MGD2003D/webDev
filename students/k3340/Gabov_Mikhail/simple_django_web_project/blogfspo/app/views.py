@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def owner_info(request, owner_id):
@@ -23,6 +24,7 @@ def owner_info(request, owner_id):
 
     return render(request, 'app/ownersearch.html', {'owner': owner})
 
+"""
 def owner_list(request):
     context = {}
 
@@ -31,6 +33,15 @@ def owner_list(request):
     context['users'] = User.objects.exclude(is_staff=True, is_superuser=True).exclude(username="AnonymousUser")
 
     return render(request, 'app/ownerlist.html', context)
+"""
+
+class OwnerListView(ListView):
+    model = Owner
+    template_name = 'app/ownerlist.html'
+    context_object_name = 'owner'
+    paginate_by = 10
+    def get_queryset(self):
+        return Owner.objects.exclude(first_name__isnull=True).exclude(first_name="").exclude(last_name__isnull=True).exclude(last_name="")
 
 
 class OwnerDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
@@ -49,6 +60,7 @@ class OwnerDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
 
 class CarListView(ListView):
     model = Car
+    paginate_by = 10
 
     def get_queryset(self):
         owner_id = self.request.GET.get('owner')
@@ -239,10 +251,21 @@ def end_rental(request, rental_id):
 @login_required
 def available_cars(request):
     rented_cars = CarOwner.objects.filter(date_end__gt=now()).values_list('car_id', flat=True)
-
     available_cars = Car.objects.exclude(id__in=rented_cars)
 
-    return render(request, 'app/available_cars.html', {'available_cars': available_cars})
+    # пагинация
+    page = request.GET.get('page', 1)
+    paginator = Paginator(available_cars, 12)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    return render(request, 'app/available_cars.html', {
+        'page_obj': page_obj,
+        'available_cars': page_obj.object_list,})
 
 class AccountView(LoginRequiredMixin, TemplateView):
     template_name = 'app/account.html'
@@ -273,9 +296,20 @@ def manage_rentals(request):
     available_cars = Car.objects.exclude(id__in=occupied_cars)
     owners = Owner.objects.exclude(first_name__isnull=True).exclude(first_name="").exclude(last_name__isnull=True).exclude(last_name="")
     rentals = CarOwner.objects.all()
-    # breakpoint()
+
+    # пагинация
+    page = request.GET.get('page', 1)
+    paginator = Paginator(rentals, 10)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
     return render(request, 'app/manage_rentals.html', {
-        'rentals': rentals,
+        'page_obj': page_obj,
+        'rentals': page_obj.object_list,
         'cars': available_cars,
         'owners': owners,
     })
